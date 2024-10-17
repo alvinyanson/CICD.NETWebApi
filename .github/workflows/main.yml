@@ -3,30 +3,35 @@ name: Deploy to Minikube using GitHub Actions
 on:
   push:
   workflow_dispatch:
-  
 jobs:
   job1:
     runs-on: ubuntu-latest
-    name: build .NET Web API Docker Image and deploy to minikube
+    name: build example and deploy to minikube
     steps:
     - uses: actions/checkout@v4
+      with:
+        repository: medyagh/local-dev-example-with-minikube
     - name: Start minikube
       uses: medyagh/setup-minikube@latest
-    - name: Try the cluster !
+    - name: Try the cluster!
       run: kubectl get pods -A
-    - name: Build image
+    - name: Build minikube image
       run: |
+        minikube image build -t local/devex:v1 . 
+    - name: Build docker image
+      run: | 
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
           echo -n "verifying images:"
-          docker images         
+          docker images       
     - name: Deploy to minikube
       run:
         kubectl apply -f ./Deployments/webapi-depl.yaml
+        kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
       run: |
-          minikube service list
-          minikube service local-devex-svc --url
-          echo "------------------opening the service------------------"
-          curl $(minikube service local-devex-svc --url)
+        minikube service list
+        minikube service local-devex-svc --url
+        echo "------------------opening the service------------------"
+        curl $(minikube service local-devex-svc --url)      
