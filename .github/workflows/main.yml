@@ -32,8 +32,7 @@ jobs:
       run: |
         ls -la
         cd ..
-        cd ..
-        ls -la
+        ls -R
     - name: Deploy to minikube
       run: |
         kubectl apply -f ./webapi.yaml
