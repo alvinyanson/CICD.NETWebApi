@@ -24,10 +24,13 @@ jobs:
           eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
           echo -n "verifying images:"
-          docker images       
+          docker images
+    - name: List files
+      run: |
+        ls -la
     - name: Deploy to minikube
       run: |
-        kubectl apply -f ./webapi-depl.yaml
+        kubectl apply -f webapi-depl.yaml
         kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
       run: |
