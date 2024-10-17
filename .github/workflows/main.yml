@@ -27,7 +27,7 @@ jobs:
           docker images       
     - name: Deploy to minikube
       run: |
-        kubectl apply -f webapi-depl.yaml
+        kubectl apply -f ./webapi-depl.yaml
         kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
       run: |
