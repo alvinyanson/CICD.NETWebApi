@@ -16,12 +16,12 @@ jobs:
       run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
-          docker build -f ../workflows/.github/CICD.NetWebAPI/Dockerfile -t ayansonarcanys/weatherapiservice:latest .
+          docker build -f ./CICD.NetWebAPI/Dockerfile -t ayansonarcanys/weatherapiservice:latest .
           echo -n "verifying images:"
           docker images         
     - name: Deploy to minikube
       run:
-        kubectl apply -f ../workflows/.github/Deployments/webapi-depl.yaml
+        kubectl apply -f ./Deployments/webapi-depl.yaml
     - name: Test service URLs
       run: |
           minikube service list
