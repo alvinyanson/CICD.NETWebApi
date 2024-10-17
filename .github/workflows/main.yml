@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: medyagh/local-dev-example-with-minikube
+        repository: https://github.com/alvinyanson/CICD.NetWebAPI
     - name: Start minikube
       uses: medyagh/setup-minikube@latest
     - name: Try the cluster!
@@ -35,7 +35,7 @@ jobs:
         ls -R
     - name: Deploy to minikube
       run: |
-        kubectl apply -f ./k8s/webapi.yaml
+        kubectl apply -f ./webapi.yaml
     - name: Test service URLs
       run: |
         minikube service list
