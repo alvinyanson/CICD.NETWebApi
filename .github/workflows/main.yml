@@ -32,6 +32,7 @@ jobs:
       run: |
         ls -la
         cd ..
+        cd ..
         ls -la
     - name: Deploy to minikube
       run: |
