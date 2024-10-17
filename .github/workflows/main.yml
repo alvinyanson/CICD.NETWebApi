@@ -36,6 +36,7 @@ jobs:
     - name: Deploy to minikube
       run: |
         kubectl apply -f ./webapi.yaml
+        kubectl get pod -l app=weatherapiservice
         kubectl wait --for=condition=ready pod -l app=weatherapiservice
     - name: Test service URLs
       run: |
