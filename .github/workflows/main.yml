@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: https://github.com/alvinyanson/CICD.NetWebAPI
+        repository: alvinyanson/CICD.NetWebAPI
     - name: Start minikube
       uses: medyagh/setup-minikube@latest
     - name: Try the cluster!
