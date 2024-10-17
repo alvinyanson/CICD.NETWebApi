@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: weatherapiservice
-          imagePullPolicy: Never
-          image: ayansonarcanys/weatherapiservice:v1
+          image: ayansonarcanys/weatherapiservice:latest
           resources:
             requests:
               cpu: "100m"  # Minimum CPU
