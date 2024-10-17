@@ -37,7 +37,7 @@ jobs:
       run: |
         kubectl apply -f ./webapi.yaml
         kubectl get pod -l app=weatherapiservice
-        kubectl wait --for=condition=ready pod -l app=weatherapiservice
+        timeout $((300+5)) kubectl wait --for=condition=ready pod -l app=weatherapiservice --timeout=300s
     - name: Test service URLs
       run: |
         minikube service list
