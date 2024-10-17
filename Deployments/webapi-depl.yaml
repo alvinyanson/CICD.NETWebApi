@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weatherapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weatherapiservice
+  template:
+    metadata:
+      labels:
+        app: weatherapiservice
+    spec:
+      containers:
+        - name: weatherapiservice
+          image: ayansonarcanys/weatherapiservice:latest
+          resources:
+            requests:
+              cpu: "100m"  # Minimum CPU
+              memory: "128Mi"  # Minimum memory
+            limits:
+              cpu: "250m"  # Maximum CPU
+              memory: "256Mi"  # Maximum memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weatherapi-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: weatherapiservice
+  ports:
+    - name: weatherapiservice
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
