@@ -1,4 +1,4 @@
-name: Deploy to Minikube using GitHub Actions
+name: Deploy to Docker Desktop using GitHub Actions
 
 on:
   push:
@@ -6,33 +6,24 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    name: build example and deploy to minikube
+    name: Build example and deploy to Docker Desktop
     steps:
     - uses: actions/checkout@v4
       with:
         repository: alvinyanson/CICD.NetWebAPI
-    - name: Start minikube
-      uses: medyagh/setup-minikube@latest
-    - name: Try the cluster!
-      run: kubectl get pods -A
-    - name: Build minikube image
+    - name: Set up Docker Buildx
       run: |
-        minikube image build -t ayansonarcanys/weatherapiservice:latest . 
-    - name: Build docker image
+        docker run --privileged --rm tonistiigi/binfmt --install all
+        docker buildx create --use
+    - name: Build Docker image
       run: | 
-          export SHELL=/bin/bash
-          eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
-          echo -n "verifying images:"
+          echo -n "Verifying images:"
           docker images
-    - name: Deploy to minikube
+    - name: Deploy to Docker Desktop
       run: |
-        kubectl apply -f ./webapi.yaml
-        kubectl get pod -l app=weatherapiservice
-        timeout $((300+5)) kubectl wait --for=condition=ready pod -l app=weatherapiservice --timeout=300s
+        docker run -d --name weatherapi -p 8080:8080 ayansonarcanys/weatherapiservice:latest
     - name: Test service URLs
       run: |
-        minikube service list
-        SERVICE_URL=$(minikube service weatherapi-np-srv --url)
         echo "------------------opening the service------------------"
-        curl "$SERVICE_URL/WeatherForecast"  
+        curl http://localhost:8080/WeatherForecast
