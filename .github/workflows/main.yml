@@ -26,7 +26,7 @@ jobs:
           echo -n "verifying images:"
           docker images       
     - name: Deploy to minikube
-      run:
+      run: |
         kubectl apply -f webapi-depl.yaml
         kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
