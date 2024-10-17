@@ -16,7 +16,7 @@ jobs:
       run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
-          docker build -f ./CICD.NetWebAPI/Dockerfile -t ayansonarcanys/weatherapiservice:latest .
+          docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
           echo -n "verifying images:"
           docker images         
     - name: Deploy to minikube
