@@ -28,9 +28,14 @@ jobs:
     - name: List files
       run: |
         ls -la
+    - name: List Deploy directory
+      run: |
+        ls -la
+        cd deploy
+        ls -la
     - name: Deploy to minikube
       run: |
-        kubectl apply -f ./deploy/webapi-depl.yaml
+        kubectl apply -f ./deploy/k8s.yaml
         kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
       run: |
