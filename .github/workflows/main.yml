@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     name: build example and deploy to minikube
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
       with:
         repository: medyagh/local-dev-example-with-minikube
     - name: Start minikube
-      uses: medyagh/setup-minikube@latest
+      uses: medyagh/setup-minikube@master
     - name: Try the cluster!
       run: kubectl get pods -A
     - name: Build minikube image
@@ -35,7 +35,7 @@ jobs:
         ls -la
     - name: Deploy to minikube
       run: |
-        kubectl apply -f ./deploy/k8s.yaml
+        kubectl apply -f ./webapi.yaml
         kubectl wait --for=condition=ready pod -l app=local-devex
     - name: Test service URLs
       run: |
