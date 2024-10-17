@@ -28,10 +28,10 @@ jobs:
     - name: List files
       run: |
         ls -la
-    - name: List Deploy directory
+    - name: List Change directory
       run: |
         ls -la
-        cd deploy
+        cd ..
         ls -la
     - name: Deploy to minikube
       run: |
