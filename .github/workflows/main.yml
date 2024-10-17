@@ -25,14 +25,6 @@ jobs:
           docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
           echo -n "verifying images:"
           docker images
-    - name: List files
-      run: |
-        ls -la
-    - name: List Change directory
-      run: |
-        ls -la
-        cd ..
-        ls -R
     - name: Deploy to minikube
       run: |
         kubectl apply -f ./webapi.yaml
@@ -41,6 +33,4 @@ jobs:
     - name: Test service URLs
       run: |
         minikube service list
-        minikube service weatherapi-srv --url
-        echo "------------------opening the service------------------"
-        curl $(minikube service weatherapi-srv --url)      
+        minikube service weatherapi-np-srv --url
