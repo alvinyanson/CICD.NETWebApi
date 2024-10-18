@@ -18,6 +18,7 @@ namespace CICD.NetWebAPI.Controllers
             _logger = logger;
         }
 
+        // Test comment
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
