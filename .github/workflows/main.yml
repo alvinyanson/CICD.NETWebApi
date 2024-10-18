@@ -1,29 +1,39 @@
-name: Deploy to Docker Desktop using GitHub Actions
+name: Publish 🚀
 
 on:
-  push:
   workflow_dispatch:
+  push:
+    branches:
+    - main
+
+env:
+  AZURE_WEBAPP_NAME:  weatherappdemo
+  AZURE_WEBAPP_PACKAGE_PATH: "./publish"
+
 jobs:
-  job1:
+  publish:
     runs-on: ubuntu-latest
-    name: Build example and deploy to Docker Desktop
+    
     steps:
-    - uses: actions/checkout@v4
-      with:
-        repository: alvinyanson/CICD.NetWebAPI
-    - name: Set up Docker Buildx
-      run: |
-        docker run --privileged --rm tonistiigi/binfmt --install all
-        docker buildx create --use
-    - name: Build Docker image
-      run: | 
-          docker build -f ./Dockerfile -t ayansonarcanys/weatherapiservice:latest .
-          echo -n "Verifying images:"
-          docker images
-    - name: Deploy to Docker Desktop
-      run: |
-        docker run -d --name weatherapi -p 8080:8080 ayansonarcanys/weatherapiservice:latest
-    - name: Test service URLs
-      run: |
-        echo "------------------opening the service------------------"
-        curl http://localhost:8080/WeatherForecast
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore
+        run: dotnet restore ./CICD.NetWebAPI.sln
+        
+      - name: Build
+        run: dotnet build ./CICD.NetWebAPI.sln --configuration Release --no-restore
+        
+      - name: Publish
+        run: dotnet publish ./CICD.NetWebAPI.sln --configuration Release --no-build
+        
+      # - name: Deployment
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      #     publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+      #     package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
